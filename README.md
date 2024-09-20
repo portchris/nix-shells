@@ -19,6 +19,10 @@ Then all you have to do is `cd` into the environment you want to load and run th
 ./start.sh <my_project_dir>
 ```
 
+### Environment Variables
+
+Each of my environments attempts to load environment variables via the respective projects `.env` file. It is therefore likely that this file is required for each project you try to load.
+
 ## FAQs
 
 > What are you trying to solve?
