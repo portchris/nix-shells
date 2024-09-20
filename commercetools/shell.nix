@@ -35,4 +35,3 @@ pkgs.mkShell {
     echo "}" >> "$JSON_FILE"
   '';
 }
-
