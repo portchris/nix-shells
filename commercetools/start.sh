@@ -18,6 +18,16 @@ export COMMERCETOOLS_PROJECT_PATH=$COMMERCETOOLS_PROJECT_PATH
 export COMMERCETOOLS_ENV_PATH=$COMMERCETOOLS_ENV_PATH
 export NIXPKGS_ALLOW_UNFREE=1
 
-# Run NIX shell
+# Load env variables
+set -a
+source $COMMERCETOOLS_ENV_PATH
+set +a
+
+# Ensure Node.Js env variables are set (if not already)
+if [ -z ${NODE_VERSION+x} ]; then
+        export NODE_VERSION=20
+fi
+
+# Run NIX shell with Node.Js
 cd $COMMERCETOOLS_PROJECT_PATH
 nix-shell $CWD/shell.nix

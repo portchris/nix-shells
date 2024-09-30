@@ -1,18 +1,21 @@
 { pkgs ? import <nixpkgs> { } }:
 with pkgs;
 let
-  nvmInstallScript = "https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh";
+  nvmUri = "https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh";
+  nodeJs = pkgs.${"nodejs_" + builtins.getEnv "NODE_VERSION"};
   nodeVersion = builtins.getEnv "NODE_VERSION";
 in
 pkgs.mkShell {
   name = "shopify-nix";
   buildInputs = [
-    ngrok
+    nodeJs
+    pkgs.yarn
+    pkgs.ngrok
   ];
   shellHook = ''
-    curl -o- ${nvmInstallScript} | bash
-    nvm install ${nodeVersion}
-    nvm alias default ${nodeVersion}
-    npm install -g @shopify/cli@latest
+    # curl -o- ${nvmUri} | bash
+    # nvm install ${nodeVersion}
+    # nvm alias default ${nodeVersion}
+    # npm install -g @shopify/cli@latest
   '';
 }
