@@ -13,6 +13,7 @@ pkgs.mkShell {
   buildInputs = [
     nodeJs
     terraform
+    pkgs.pnpm
     pkgs.yarn
     pkgs.ngrok
   ];
@@ -30,7 +31,7 @@ pkgs.mkShell {
           KEY=$(echo "$line" | cut -d '=' -f 1 | tr '[:upper:]' '[:lower:]')
           LINE=$(echo "$line" | cut -d '=' -f 2-)
           VALUE=$(echo "$LINE" | sed 's/"/\\"/g')
-          if [[ $KEY != *"#"* ]]; then
+          if [[ $KEY != *"#"* ]] && [[ $KEY != "" ]]; then
             echo "  \"$KEY\": \"$VALUE\"," >> "$JSON_FILE"
             export TF_VAR_$KEY=$VALUE
           fi
@@ -47,3 +48,4 @@ pkgs.mkShell {
     # nvm alias default ${nodeVersion}
   '';
 }
+
