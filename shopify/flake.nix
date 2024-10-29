@@ -28,14 +28,23 @@
               sha256 = "sha256-RZG2XLBiXzS6NfN4m2JUIqf9K0pxUKYUK6bGpSu0Xac=";
             })
             { };
+
+          loadEnvironmentVariables = ''
+            if [ -f "$CWD/.env" ]; then
+              set -a
+              source $CWD/.env
+              set +a
+              cat $CWD/.env
+            fi
+          '';
         in
         {
           packages = {
             nodejs16 = pkgs.stdenv.mkDerivation {
               name = "nodejs16.0.0";
               src = pkgs.fetchurl {
-                url = "https://nodejs.org/dist/v16.0.0/node-v16.0.0-darwin-arm64.tar.gz";
-                sha256 = "sha256-LW1BKrz3yTdfGf3hQIamQj5buUFe7KHMrUljj/xHbqM=";
+                url = "https://nodejs.org/dist/latest-v16.x/node-v16.20.2-linux-x64.tar.gz";
+                sha256 = "c9193e6c414891694759febe846f4f023bf48410a6924a8b1520c46565859665";
               };
               installPhase = ''
                 echo "installing nodejs"
@@ -47,8 +56,10 @@
           devShells = {
             default = pkgs.mkShell {
               packages = with pkgs; [ nodejs ];
+              shellHook = loadEnvironmentVariables;
             };
             node_16 = pkgs.mkShell {
+              shellHook = loadEnvironmentVariables;
               packages = with pkgs; [
                 nodePackages_latest.vercel
                 httpie
@@ -58,6 +69,7 @@
               ];
             };
             node_18 = pkgs.mkShell {
+              shellHook = loadEnvironmentVariables;
               packages = with pkgs; [
                 nodePackages_latest.vercel
                 httpie
@@ -68,6 +80,7 @@
               ];
             };
             liquidtheme = pkgs.mkShell {
+              shellHook = loadEnvironmentVariables;
               packages = with pkgs; [
                 nodePackages_latest.vercel
                 ruby
