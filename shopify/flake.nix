@@ -79,6 +79,18 @@
                 })
               ];
             };
+            node_20 = pkgs.mkShell {
+              shellHook = loadEnvironmentVariables;
+              packages = with pkgs; [
+                nodePackages_latest.vercel
+                nodePackages_latest.yarn
+                httpie
+                nodejs_20
+                (yarn.override {
+                  nodejs = nodejs_20;
+                })
+              ];
+            };
             liquidtheme = pkgs.mkShell {
               shellHook = loadEnvironmentVariables;
               packages = with pkgs; [
