@@ -30,16 +30,28 @@
             { };
 
           loadEnvironmentVariables = ''
-            if [ -f "$CWD/.env" ]; then
+            if [ -f "$(pwd)/.env" ]; then
               set -a
-              source $CWD/.env
+              source $(pwd)/.env
               set +a
-              cat $CWD/.env
+              cat $(pwd)/.env
             fi
           '';
         in
         {
           packages = {
+            nodejs12 = pkgs.stdenv.mkDerivation {
+              name = "nodejs12.22.7";
+              src = pkgs.fetchurl {
+                url = "https://nodejs.org/dist/v12.22.7/node-v12.22.7-linux-x64.tar.gz";
+                sha256 = "0c650e494a0ce293fb1220cc81ab5b6b819c249439c392b5ee2e8b812eec5592";
+              };
+              installPhase = ''
+                echo "installing Node.Js v12.22.7"
+                mkdir -p $out
+                cp -r ./ $out/
+              '';
+            };
             nodejs16 = pkgs.stdenv.mkDerivation {
               name = "nodejs16.0.0";
               src = pkgs.fetchurl {
@@ -47,7 +59,7 @@
                 sha256 = "c9193e6c414891694759febe846f4f023bf48410a6924a8b1520c46565859665";
               };
               installPhase = ''
-                echo "installing nodejs"
+                echo "installing Node.Js v16.x"
                 mkdir -p $out
                 cp -r ./ $out/
               '';
@@ -101,6 +113,13 @@
                 (yarn.override {
                   nodejs = nodejs_18;
                 })
+                shopify-cli
+              ];
+            };
+            camilla_marc = pkgs.mkShell {
+              packages = with pkgs; [
+                httpie
+                self'.packages.nodejs12
                 shopify-cli
               ];
             };

@@ -46,7 +46,9 @@
           };
           devShells = {
             default = pkgs.mkShell {
-              packages = with pkgs; [ nodejs ];
+              packages = with pkgs; [
+                nodejs
+              ];
             };
             node_16 = pkgs.mkShell {
               packages = with pkgs; [
@@ -64,6 +66,16 @@
                 nodejs_18
                 (yarn.override {
                   nodejs = nodejs_18;
+                })
+              ];
+            };
+            nodejs_20 = pkgs.mkShell {
+              packages = with pkgs; [
+                nodePackages_latest.vercel
+                httpie
+                nodejs_20
+                (yarn.override {
+                  nodejs = nodejs_20;
                 })
               ];
             };
